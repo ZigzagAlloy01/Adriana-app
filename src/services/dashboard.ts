@@ -5,14 +5,14 @@ import { supabase } from "@/services/supabase";
 ========================= */
 
 export async function getMyCoupleId() {
-  const { data, error } = await supabase
-    .from("couple_members")
-    .select("couple_id")
-    .single();
+  const { data, error } = await supabase.rpc("get_my_couple_id");
 
-  if (error) throw error;
+  if (error) {
+    console.error("Error obteniendo el ID de pareja:", error);
+    throw error;
+  }
 
-  return data.couple_id;
+  return data;
 }
 
 /* =========================
@@ -27,7 +27,7 @@ export async function getNextEvent(coupleId: string) {
     .gte("event_date", new Date().toISOString())
     .order("event_date", { ascending: true })
     .limit(1)
-    .single();
+    .maybeSingle();
 
   if (error) return null;
 
@@ -39,12 +39,17 @@ export async function getNextEvent(coupleId: string) {
 ========================= */
 
 export async function getRecentMemories(coupleId: string) {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("memories")
     .select("*")
     .eq("couple_id", coupleId)
     .order("created_at", { ascending: false })
     .limit(5);
+  
+  if (error) {
+    console.error("Error cargando recuerdos:", error);
+    return [];
+  }
 
   return data ?? [];
 }
@@ -54,12 +59,17 @@ export async function getRecentMemories(coupleId: string) {
 ========================= */
 
 export async function getRecentPhotos(coupleId: string) {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("photos")
     .select("*")
     .eq("couple_id", coupleId)
     .order("created_at", { ascending: false })
     .limit(6);
+
+  if (error) {
+    console.error("Error cargando fotos:", error);
+    return [];
+  }
 
   return data ?? [];
 }

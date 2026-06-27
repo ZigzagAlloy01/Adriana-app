@@ -2,11 +2,19 @@ import { supabase } from "@/services/supabase";
 import { v4 as uuidv4 } from "uuid";
 
 export async function createCouple(userId: string) {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  console.log("SESSION", session);
+
   const { data: couple, error } = await supabase
     .from("couples")
     .insert({})
     .select()
     .single();
+
+  console.log("INSERT RESULT", { couple, error });
 
   if (error) throw error;
 

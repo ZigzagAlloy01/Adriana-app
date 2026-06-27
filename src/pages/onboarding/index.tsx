@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useCoupleStore } from "@/store/coupleStore";
 import CreateCouple from "./CreateCouple";
 import JoinCouple from "./JoinCouple";
 
@@ -6,6 +8,16 @@ type Mode = "home" | "create" | "join";
 
 export default function Onboarding() {
   const [mode, setMode] = useState<Mode>("home");
+  const coupleId = useCoupleStore((s) => s.coupleId);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (coupleId) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [coupleId, navigate]);
+
+  if (coupleId) return null;
 
   if (mode === "create") return <CreateCouple />;
   if (mode === "join") return <JoinCouple />;

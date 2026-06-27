@@ -9,7 +9,7 @@ function getDaysTogether(startDate: string) {
 
 export default function DaysTogetherCard() {
   // temporal (luego viene de DB)
-  const startDate = "2025-01-01";
+  const startDate = "2024-08-03";
 
   const days = getDaysTogether(startDate);
 

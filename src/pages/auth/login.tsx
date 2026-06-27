@@ -6,7 +6,7 @@ import { useCoupleStore } from "@/store/coupleStore";
 
 export default function Login() {
   const navigate = useNavigate();
-  const { fetchUser } = useAuthStore();
+  const initAuth = useAuthStore((state) => state.init);
   const { fetchCouple } = useCoupleStore();
 
   const [email, setEmail] = useState("");
@@ -16,6 +16,8 @@ export default function Login() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
+
     setLoading(true);
     setError(null);
 
@@ -30,7 +32,7 @@ export default function Login() {
       return;
     }
 
-    await fetchUser();
+    await initAuth();
     await fetchCouple();
 
     setLoading(false);

@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { createCouple } from "@/services/couples";
 import { useAuthStore } from "@/store/authStore";
+import { useCoupleStore } from "@/store/coupleStore";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/services/supabase";
 
 export default function CreateCouple() {
   const { user } = useAuthStore();
+  const fetchCouple = useCoupleStore((s) => s.fetchCouple);
   const navigate = useNavigate();
 
   const [code, setCode] = useState<string | null>(null);
@@ -13,11 +16,25 @@ export default function CreateCouple() {
   const handleCreate = async () => {
     if (!user) return;
 
+    console.log(await supabase.auth.getUser());
+
     setLoading(true);
 
     try {
       const inviteCode = await createCouple(user.id);
       setCode(inviteCode);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoToDashboard = async () => {
+    setLoading(true);
+    try {
+      await fetchCouple();
+      navigate("/dashboard");
+    } catch (error) {
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -46,10 +63,11 @@ export default function CreateCouple() {
           </div>
 
           <button
-            onClick={() => navigate("/")}
-            className="bg-black text-white px-4 py-2 rounded"
+            onClick={handleGoToDashboard}
+            disabled={loading}
+            className="bg-black text-white px-4 py-2 rounded w-full"
           >
-            Ir al dashboard
+            {loading ? "Sincronizando..." : "Ir al dashboard"}
           </button>
         </div>
       )}

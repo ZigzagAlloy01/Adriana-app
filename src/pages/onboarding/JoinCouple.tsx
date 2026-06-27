@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { joinCouple } from "@/services/couples";
 import { useAuthStore } from "@/store/authStore";
+import { useCoupleStore } from "@/store/coupleStore";
 import { useNavigate } from "react-router-dom";
 
 export default function JoinCouple() {
   const { user } = useAuthStore();
+  const fetchCouple = useCoupleStore((s) => s.fetchCouple);
   const navigate = useNavigate();
 
   const [code, setCode] = useState("");
@@ -20,10 +22,11 @@ export default function JoinCouple() {
 
     try {
       await joinCouple(user.id, code.trim());
+      await fetchCouple();
       setSuccess(true);
 
       setTimeout(() => {
-        navigate("/");
+        navigate("/dashboard");
       }, 1000);
     } catch (err: any) {
       setError(err.message || "Código inválido");
@@ -48,7 +51,7 @@ export default function JoinCouple() {
       )}
 
       {success ? (
-        <p className="text-green-600 text-sm">
+        <p className="text-green-600 text-sm font-medium animate-pulse">
           ¡Te uniste correctamente! ❤️
         </p>
       ) : (

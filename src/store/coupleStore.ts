@@ -12,14 +12,39 @@ export const useCoupleStore = create<CoupleState>((set) => ({
   loading: true,
 
   fetchCouple: async () => {
-    const { data } = await supabase
-      .from("couple_members")
-      .select("couple_id")
-      .maybeSingle();
+  set({ loading: true });
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
     set({
-      coupleId: data?.couple_id ?? null,
+      coupleId: null,
       loading: false,
     });
-  },
+    return;
+  }
+
+  const { data, error } = await supabase
+    .from("couple_members")
+    .select("couple_id")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  console.log("Couple query:", { data, error });
+
+  if (error) {
+    set({
+      coupleId: null,
+      loading: false,
+    });
+    return;
+  }
+
+  set({
+    coupleId: data?.couple_id ?? null,
+    loading: false,
+  });
+},
 }));

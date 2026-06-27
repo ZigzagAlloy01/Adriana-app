@@ -1,8 +1,9 @@
 import { create } from "zustand";
 import { supabase } from "@/services/supabase";
+import type { User } from "@supabase/supabase-js";
 
 type AuthState = {
-  user: any;
+  user: User | null;
   loading: boolean;
   initialized: boolean;
 
