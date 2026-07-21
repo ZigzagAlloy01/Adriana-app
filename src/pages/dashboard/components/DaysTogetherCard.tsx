@@ -1,24 +1,18 @@
-function getDaysTogether(startDate: string) {
+function getDaysTogether(startDate: string | null) {
+  if (!startDate) return 0;
   const start = new Date(startDate);
   const now = new Date();
-  const diff = Math.floor(
-    (now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
-  );
-  return diff;
+  return Math.max(0, Math.floor((now.getTime() - start.getTime()) / 86_400_000));
 }
 
-export default function DaysTogetherCard() {
-  // temporal (luego viene de DB)
-  const startDate = "2024-08-03";
-
+export default function DaysTogetherCard({ startDate }: { startDate: string | null }) {
   const days = getDaysTogether(startDate);
 
   return (
-    <div className="bg-white p-4 rounded-2xl shadow">
-      <h2 className="text-sm text-gray-500">Días juntos</h2>
-      <p className="text-3xl font-bold text-pink-500">
-        {days} ❤️
-      </p>
-    </div>
+    <section className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
+      <h2 className="m-0 text-sm font-medium text-slate-500">Dias juntos</h2>
+      <p className="mt-3 text-4xl font-semibold text-rose-600">{days}</p>
+      <p className="mt-1 text-sm text-slate-500">Calculado desde la fecha de aniversario o creacion.</p>
+    </section>
   );
 }

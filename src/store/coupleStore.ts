@@ -1,50 +1,40 @@
 import { create } from "zustand";
 import { supabase } from "@/services/supabase";
+import { getMyCouple } from "@/services/couples";
 
 type CoupleState = {
   coupleId: string | null;
   loading: boolean;
+  error: string | null;
   fetchCouple: () => Promise<void>;
+  reset: () => void;
 };
 
 export const useCoupleStore = create<CoupleState>((set) => ({
   coupleId: null,
   loading: true,
+  error: null,
 
   fetchCouple: async () => {
-  set({ loading: true });
+    set({ loading: true, error: null });
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    const { data } = await supabase.auth.getUser();
+    if (!data.user) {
+      set({ coupleId: null, loading: false });
+      return;
+    }
 
-  if (!user) {
-    set({
-      coupleId: null,
-      loading: false,
-    });
-    return;
-  }
+    try {
+      const coupleId = await getMyCouple();
+      set({ coupleId, loading: false });
+    } catch (error) {
+      set({
+        coupleId: null,
+        loading: false,
+        error: error instanceof Error ? error.message : "No se pudo cargar la pareja.",
+      });
+    }
+  },
 
-  const { data, error } = await supabase
-    .from("couple_members")
-    .select("couple_id")
-    .eq("user_id", user.id)
-    .maybeSingle();
-
-  console.log("Couple query:", { data, error });
-
-  if (error) {
-    set({
-      coupleId: null,
-      loading: false,
-    });
-    return;
-  }
-
-  set({
-    coupleId: data?.couple_id ?? null,
-    loading: false,
-  });
-},
+  reset: () => set({ coupleId: null, loading: false, error: null }),
 }));

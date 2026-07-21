@@ -1,0 +1,471 @@
+[
+  {
+    "get_database_json": {
+      "albums": {
+        "rows": [],
+        "columns": [
+          {
+            "data_type": "uuid",
+            "column_name": "id",
+            "is_nullable": "NO"
+          },
+          {
+            "data_type": "uuid",
+            "column_name": "couple_id",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "text",
+            "column_name": "name",
+            "is_nullable": "NO"
+          },
+          {
+            "data_type": "timestamp with time zone",
+            "column_name": "created_at",
+            "is_nullable": "YES"
+          }
+        ]
+      },
+      "events": {
+        "rows": [],
+        "columns": [
+          {
+            "data_type": "uuid",
+            "column_name": "id",
+            "is_nullable": "NO"
+          },
+          {
+            "data_type": "uuid",
+            "column_name": "couple_id",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "text",
+            "column_name": "title",
+            "is_nullable": "NO"
+          },
+          {
+            "data_type": "text",
+            "column_name": "description",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "timestamp with time zone",
+            "column_name": "starts_at",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "timestamp with time zone",
+            "column_name": "ends_at",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "uuid",
+            "column_name": "created_by",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "timestamp with time zone",
+            "column_name": "created_at",
+            "is_nullable": "YES"
+          }
+        ]
+      },
+      "photos": {
+        "rows": [],
+        "columns": [
+          {
+            "data_type": "uuid",
+            "column_name": "id",
+            "is_nullable": "NO"
+          },
+          {
+            "data_type": "uuid",
+            "column_name": "album_id",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "uuid",
+            "column_name": "uploaded_by",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "text",
+            "column_name": "storage_path",
+            "is_nullable": "NO"
+          },
+          {
+            "data_type": "text",
+            "column_name": "caption",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "timestamp with time zone",
+            "column_name": "created_at",
+            "is_nullable": "YES"
+          }
+        ]
+      },
+      "answers": {
+        "rows": [],
+        "columns": [
+          {
+            "data_type": "uuid",
+            "column_name": "id",
+            "is_nullable": "NO"
+          },
+          {
+            "data_type": "uuid",
+            "column_name": "question_id",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "uuid",
+            "column_name": "user_id",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "text",
+            "column_name": "answer",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "timestamp with time zone",
+            "column_name": "created_at",
+            "is_nullable": "YES"
+          }
+        ]
+      },
+      "couples": {
+        "rows": [
+          {
+            "id": "6ec513f2-3477-4028-9078-eff140fde7ca",
+            "created_at": "2026-07-20T23:19:02.054253+00:00",
+            "anniversary_date": null
+          }
+        ],
+        "columns": [
+          {
+            "data_type": "uuid",
+            "column_name": "id",
+            "is_nullable": "NO"
+          },
+          {
+            "data_type": "date",
+            "column_name": "anniversary_date",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "timestamp with time zone",
+            "column_name": "created_at",
+            "is_nullable": "YES"
+          }
+        ]
+      },
+      "memories": {
+        "rows": [],
+        "columns": [
+          {
+            "data_type": "uuid",
+            "column_name": "id",
+            "is_nullable": "NO"
+          },
+          {
+            "data_type": "uuid",
+            "column_name": "couple_id",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "text",
+            "column_name": "title",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "text",
+            "column_name": "description",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "date",
+            "column_name": "memory_date",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "boolean",
+            "column_name": "favorite",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "uuid",
+            "column_name": "created_by",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "timestamp with time zone",
+            "column_name": "created_at",
+            "is_nullable": "YES"
+          }
+        ]
+      },
+      "profiles": {
+        "rows": [
+          {
+            "id": "fa7db228-fb0a-43d4-bc22-a06f4133e6d9",
+            "avatar_url": null,
+            "created_at": "2026-07-20T23:17:19.181121+00:00",
+            "display_name": null
+          }
+        ],
+        "columns": [
+          {
+            "data_type": "uuid",
+            "column_name": "id",
+            "is_nullable": "NO"
+          },
+          {
+            "data_type": "text",
+            "column_name": "display_name",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "text",
+            "column_name": "avatar_url",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "timestamp with time zone",
+            "column_name": "created_at",
+            "is_nullable": "YES"
+          }
+        ]
+      },
+      "questions": {
+        "rows": [],
+        "columns": [
+          {
+            "data_type": "uuid",
+            "column_name": "id",
+            "is_nullable": "NO"
+          },
+          {
+            "data_type": "uuid",
+            "column_name": "questionnaire_id",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "text",
+            "column_name": "question",
+            "is_nullable": "NO"
+          },
+          {
+            "data_type": "integer",
+            "column_name": "position",
+            "is_nullable": "YES"
+          }
+        ]
+      },
+      "invitations": {
+        "rows": [
+          {
+            "id": "06ef96a3-ad1b-408c-b782-9b35f4762cfe",
+            "code": "8f7695a7",
+            "used": false,
+            "couple_id": "6ec513f2-3477-4028-9078-eff140fde7ca",
+            "created_at": "2026-07-20T23:19:02.301031+00:00",
+            "expires_at": null
+          }
+        ],
+        "columns": [
+          {
+            "data_type": "uuid",
+            "column_name": "id",
+            "is_nullable": "NO"
+          },
+          {
+            "data_type": "uuid",
+            "column_name": "couple_id",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "text",
+            "column_name": "code",
+            "is_nullable": "NO"
+          },
+          {
+            "data_type": "timestamp with time zone",
+            "column_name": "expires_at",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "boolean",
+            "column_name": "used",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "timestamp with time zone",
+            "column_name": "created_at",
+            "is_nullable": "YES"
+          }
+        ]
+      },
+      "notifications": {
+        "rows": [],
+        "columns": [
+          {
+            "data_type": "uuid",
+            "column_name": "id",
+            "is_nullable": "NO"
+          },
+          {
+            "data_type": "uuid",
+            "column_name": "user_id",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "text",
+            "column_name": "title",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "text",
+            "column_name": "body",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "boolean",
+            "column_name": "read",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "timestamp with time zone",
+            "column_name": "created_at",
+            "is_nullable": "YES"
+          }
+        ]
+      },
+      "couple_members": {
+        "rows": [
+          {
+            "role": "member",
+            "user_id": "fa7db228-fb0a-43d4-bc22-a06f4133e6d9",
+            "couple_id": "6ec513f2-3477-4028-9078-eff140fde7ca",
+            "created_at": "2026-07-20T23:19:02.173448+00:00"
+          },
+          {
+            "role": "member",
+            "user_id": "c8a0d664-6084-47b2-9988-3c6130044242",
+            "couple_id": "6ec513f2-3477-4028-9078-eff140fde7ca",
+            "created_at": "2026-07-20T23:23:39.172902+00:00"
+          }
+        ],
+        "columns": [
+          {
+            "data_type": "uuid",
+            "column_name": "couple_id",
+            "is_nullable": "NO"
+          },
+          {
+            "data_type": "uuid",
+            "column_name": "user_id",
+            "is_nullable": "NO"
+          },
+          {
+            "data_type": "text",
+            "column_name": "role",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "timestamp with time zone",
+            "column_name": "created_at",
+            "is_nullable": "YES"
+          }
+        ]
+      },
+      "questionnaires": {
+        "rows": [],
+        "columns": [
+          {
+            "data_type": "uuid",
+            "column_name": "id",
+            "is_nullable": "NO"
+          },
+          {
+            "data_type": "uuid",
+            "column_name": "couple_id",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "text",
+            "column_name": "title",
+            "is_nullable": "NO"
+          },
+          {
+            "data_type": "timestamp with time zone",
+            "column_name": "created_at",
+            "is_nullable": "YES"
+          }
+        ]
+      },
+      "timeline_posts": {
+        "rows": [],
+        "columns": [
+          {
+            "data_type": "uuid",
+            "column_name": "id",
+            "is_nullable": "NO"
+          },
+          {
+            "data_type": "uuid",
+            "column_name": "couple_id",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "text",
+            "column_name": "body",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "uuid",
+            "column_name": "created_by",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "timestamp with time zone",
+            "column_name": "created_at",
+            "is_nullable": "YES"
+          }
+        ]
+      },
+      "wishlist_items": {
+        "rows": [],
+        "columns": [
+          {
+            "data_type": "uuid",
+            "column_name": "id",
+            "is_nullable": "NO"
+          },
+          {
+            "data_type": "uuid",
+            "column_name": "couple_id",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "text",
+            "column_name": "title",
+            "is_nullable": "NO"
+          },
+          {
+            "data_type": "boolean",
+            "column_name": "purchased",
+            "is_nullable": "YES"
+          },
+          {
+            "data_type": "timestamp with time zone",
+            "column_name": "created_at",
+            "is_nullable": "YES"
+          }
+        ]
+      }
+    }
+  }
+]

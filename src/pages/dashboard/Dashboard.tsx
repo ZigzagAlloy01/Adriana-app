@@ -1,62 +1,44 @@
-import { useEffect, useState } from "react";
-import {
-  getMyCoupleId,
-  getNextEvent,
-  getRecentMemories,
-  getRecentPhotos,
-} from "@/services/dashboard";
-
+import { useEffect } from "react";
+import { updateCouple } from "@/services/dashboard";
+import { useCoupleStore } from "@/store/coupleStore";
+import { useDashboardStore } from "@/store/dashboardStore";
 import CoupleHeader from "./components/CoupleHeader";
 import DaysTogetherCard from "./components/DaysTogetherCard";
 import NextDateCard from "./components/NextDateCard";
 import MemoriesPreview from "./components/MemoriesPreview";
 import QuickActions from "./components/QuickActions";
 import PhotosPreview from "./components/PhotosPreview";
-import type { Event, Memory, Photo } from "@/types/dashboard";
 
 export default function Dashboard() {
-  const [coupleId, setCoupleId] = useState<string | null>(null);
-  const [memories, setMemories] = useState<Memory[]>([]);
-  const [photos, setPhotos] = useState<Photo[]>([]);
-  const [nextEvent, setNextEvent] = useState<Event | null>(null);
+  const coupleId = useCoupleStore((state) => state.coupleId);
+  const { summary, loading, error, load } = useDashboardStore();
 
   useEffect(() => {
-    async function load() {
-      const id = await getMyCoupleId();
-      setCoupleId(id);
+    if (coupleId) void load(coupleId);
+  }, [coupleId, load]);
 
-      const [event, mems, pics] = await Promise.all([
-        getNextEvent(id),
-        getRecentMemories(id),
-        getRecentPhotos(id),
-      ]);
-
-      setNextEvent(event);
-      setMemories(mems);
-      setPhotos(pics);
-    }
-
-    load();
-  }, []);
-
-  if (!coupleId) {
-    return <div className="p-6">Cargando pareja...</div>;
-  }
+  if (!coupleId || loading) return <div className="min-h-screen bg-rose-50 p-6 text-slate-500">Cargando pareja...</div>;
+  if (error) return <div className="min-h-screen bg-rose-50 p-6 text-red-600">{error}</div>;
 
   return (
-    <div className="min-h-screen bg-pink-50 p-6 space-y-6">
-
-      <CoupleHeader />
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <DaysTogetherCard />
-        <NextDateCard event={nextEvent} />
+    <main className="min-h-screen bg-rose-50 p-4 text-left sm:p-6">
+      <div className="mx-auto max-w-5xl space-y-5">
+        <CoupleHeader
+          couple={summary?.couple ?? null}
+          counts={summary?.counts}
+          onAnniversarySave={async (date) => {
+            await updateCouple(coupleId, { anniversary_date: date });
+            await load(coupleId);
+          }}
+        />
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <DaysTogetherCard startDate={summary?.couple?.anniversary_date ?? summary?.couple?.created_at ?? null} />
+          <NextDateCard event={summary?.nextEvent ?? null} />
+        </div>
+        <QuickActions />
+        <MemoriesPreview memories={summary?.recentMemories ?? []} />
+        <PhotosPreview photos={summary?.recentPhotos ?? []} />
       </div>
-
-      <MemoriesPreview memories={memories} />
-      <PhotosPreview photos={photos} />
-
-      <QuickActions />
-    </div>
+    </main>
   );
 }

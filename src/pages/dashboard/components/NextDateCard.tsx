@@ -1,20 +1,17 @@
-type Props = {
-  event: any;
-};
+import type { Event } from "@/types/dashboard";
 
-export default function NextDateCard({ event }: Props) {
+export default function NextDateCard({ event }: { event: Event | null }) {
   return (
-    <div className="bg-white p-4 rounded-2xl shadow">
-      <h2 className="text-sm text-gray-500">Próxima cita</h2>
-
+    <section className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
+      <h2 className="m-0 text-sm font-medium text-slate-500">Proxima cita</h2>
       {event ? (
-        <p className="text-lg font-semibold">
-          {event.title} -{" "}
-          {new Date(event.event_date).toLocaleString()}
-        </p>
+        <div className="mt-3">
+          <p className="text-xl font-semibold text-slate-950">{event.title}</p>
+          <p className="text-sm text-slate-500">{new Date(event.starts_at).toLocaleString()}</p>
+        </div>
       ) : (
-        <p className="text-gray-400">No hay citas próximas</p>
+        <p className="mt-3 text-sm text-slate-400">No hay citas proximas.</p>
       )}
-    </div>
+    </section>
   );
 }

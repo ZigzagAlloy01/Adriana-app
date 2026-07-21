@@ -1,0 +1,375 @@
+Quiero que actúes como un Senior Full Stack Engineer con experiencia en React, TypeScript, Vite, Supabase y diseño de aplicaciones SaaS de producción.
+
+No quiero ejemplos ni código de tutorial.
+
+Quiero arquitectura de nivel producción.
+
+Proyecto
+
+Estoy desarrollando una aplicación para parejas, similar a Between, Paired o Lovewick.
+
+Stack:
+
+React
+TypeScript
+Vite
+TailwindCSS
+Zustand
+React Router
+Supabase
+PostgreSQL
+
+El proyecto ya existe y NO quiero reiniciarlo.
+
+Debes continuar sobre la base existente.
+
+Lo que YA está hecho
+Autenticación
+
+Existe login y registro mediante Supabase Auth.
+
+Ya funcionan:
+
+Registro
+Inicio de sesión
+Persistencia de sesión
+Logout
+Auth Store con Zustand
+Routing
+
+Existe AppRouter.
+
+También existe:
+
+AuthGuard
+Routing inteligente
+
+El flujo es parecido a Netflix:
+
+No autenticado
+
+↓
+
+Login / Register
+
+↓
+
+Onboarding
+
+↓
+
+Dashboard
+
+Onboarding
+
+Ya existe.
+
+Permite:
+
+Crear pareja
+
+Unirse mediante código
+
+Generar código de invitación
+
+Dashboard
+
+Ya existe visualmente.
+
+Tiene componentes como:
+
+CoupleHeader
+
+DaysTogetherCard
+
+NextDateCard
+
+MemoriesPreview
+
+QuickActions
+
+Pero actualmente muchos muestran datos mock.
+
+Stores
+
+Existen stores de Zustand:
+
+authStore
+
+coupleStore
+
+dashboardStore (parcial)
+
+Servicios
+
+Ya existen:
+
+supabase.ts
+
+couples.ts
+
+dashboard.ts
+
+Base de datos
+
+Ya existen tablas similares a:
+
+profiles
+
+couples
+
+couple_members
+
+invitations
+
+events
+
+memories
+
+photos
+
+goals
+
+messages
+
+No asumas que todas están perfectas.
+
+Problemas encontrados
+
+Durante el desarrollo aparecieron varios problemas con Supabase.
+
+1.
+
+Las políticas RLS terminaron generando recursión.
+
+Error:
+
+stack depth exceeded
+
+debido a una función:
+
+get_my_couple_id()
+
+No quiero volver a caer en ese diseño.
+
+2.
+
+Hubo problemas con:
+
+permission denied
+
+new row violates row-level security
+
+políticas duplicadas
+
+grants faltantes
+
+3.
+
+Hubo errores por:
+
+políticas antiguas
+
+funciones viejas
+
+objetos que ya existían
+
+columnas repetidas
+
+Por eso quiero que TODO el backend sea regenerado correctamente.
+
+Lo que quiero ahora
+
+Quiero convertir esta aplicación en una aplicación completamente funcional.
+
+No quiero demos.
+
+No quiero mocks.
+
+No quiero datos falsos.
+
+Todo conectado a Supabase.
+
+Quiero que el backend sea completamente reconstruido.
+
+Necesito un SQL único de aproximadamente 700–1000 líneas.
+
+Debe ser profesional.
+
+Debe ser idempotente.
+
+Es decir:
+
+si algo existe
+
+no falla.
+
+Debe usar:
+
+IF EXISTS
+
+IF NOT EXISTS
+
+CREATE OR REPLACE
+
+ALTER TABLE ...
+
+DO $$ ...
+
+etc.
+
+Debe incluir:
+
+Schemas
+
+Constraints
+
+Foreign Keys
+
+Indexes
+
+Triggers
+
+Functions
+
+RPC
+
+Views
+
+Storage
+
+Policies
+
+RLS
+
+Grants
+
+Seeds opcionales
+
+Todo.
+
+Quiero evitar completamente diseños que produzcan recursión en RLS.
+
+Si es necesario usar SECURITY DEFINER, úsalo únicamente donde sea apropiado.
+
+Modelo de datos esperado
+
+Debe soportar:
+
+Parejas
+
+Miembros
+
+Invitaciones
+
+Eventos
+
+Calendario
+
+Recuerdos
+
+Fotos
+
+Álbumes
+
+Comentarios
+
+Likes
+
+Mensajes
+
+Metas
+
+Checklist
+
+Notificaciones
+
+Configuraciones
+
+Storage
+
+Archivos
+
+Frontend
+
+Después del SQL quiero conectar TODO.
+
+No quiero rehacer el frontend.
+
+Quiero aprovechar los componentes existentes.
+
+Debes conectar:
+
+Dashboard
+
+Eventos
+
+Recuerdos
+
+Fotos
+
+Mensajes
+
+Objetivos
+
+Todo.
+
+Quiero un proyecto nivel producción.
+
+Eso implica:
+
+tipado end-to-end
+
+tipos generados desde Supabase
+
+services limpios
+
+stores limpios
+
+queries centralizadas
+
+sin any
+
+sin código duplicado
+
+sin lógica dentro de componentes
+
+sin consultas repetidas
+
+Forma de trabajar
+
+No me expliques teoría.
+
+No me des tutoriales.
+
+No me preguntes cada paso.
+
+Toma decisiones de arquitectura.
+
+Justifícalas brevemente cuando sea importante.
+
+Genera código listo para copiar.
+
+Cuando un archivo cambie:
+
+indica siempre su ruta completa.
+
+Por ejemplo:
+
+src/services/couples.ts
+
+src/store/authStore.ts
+
+src/pages/dashboard/index.tsx
+
+etc.
+
+Objetivo final
+
+Quiero terminar una aplicación para parejas completamente funcional, lista para desplegar en producción, con calidad similar a una startup SaaS moderna.
+
+No reduzcas el alcance.
+
+No simplifiques el diseño.
+
+Actúa como si fueras el arquitecto principal del proyecto y llévalo hasta el final.

@@ -6,7 +6,6 @@ type AuthState = {
   user: User | null;
   loading: boolean;
   initialized: boolean;
-
   init: () => Promise<void>;
   logout: () => Promise<void>;
 };
@@ -18,14 +17,12 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   init: async () => {
     set({ loading: true });
-
-    const { data } = await supabase.auth.getUser();
-
-    set({
-      user: data.user,
-      loading: false,
-      initialized: true,
-    });
+    const { data, error } = await supabase.auth.getUser();
+    if (error) {
+      set({ user: null, loading: false, initialized: true });
+      return;
+    }
+    set({ user: data.user, loading: false, initialized: true });
   },
 
   logout: async () => {
