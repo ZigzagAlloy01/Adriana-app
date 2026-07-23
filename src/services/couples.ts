@@ -70,12 +70,18 @@ export async function updateCouple(
   )
     {
     
-    const cleanValues = {
+    const cleanValues: Record<string, any> = {
       ...values,
       name: values.name?.trim() === ""
         ? undefined
         : values.name?.trim(),
     };
+
+    Object.keys(cleanValues).forEach((key) => {
+      if (cleanValues[key] === undefined) {
+        delete cleanValues[key];
+      }
+    })
 
     const { data, error } = await supabase
       .from("couples")
