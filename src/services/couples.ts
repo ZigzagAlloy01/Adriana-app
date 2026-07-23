@@ -66,7 +66,7 @@ export async function updateCouple(
       anniversary_date: string | null;
       cover_url: string | null;
       theme_color: string | null;
-    }
+    }>
   )
     {
     
