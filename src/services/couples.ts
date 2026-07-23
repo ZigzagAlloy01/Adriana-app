@@ -85,7 +85,7 @@ export async function updateCouple(
 
     const { data, error } = await supabase
       .from("couples")
-      .update(cleanValues)
+      .update(cleanValues as any)
       .eq("id", coupleId)
       .select()
       .single();
