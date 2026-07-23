@@ -58,3 +58,33 @@ export async function getMyCouple() {
   if (error) return null;
   return data;
 }
+
+export async function updateCouple(
+    coupleId: string,
+    values: Partial<{
+      name: string;
+      anniversary_date: string | null;
+      cover_url: string | null;
+      theme_color: string | null;
+    }
+  )
+    {
+    
+    const cleanValues = {
+      ...values,
+      name: values.name?.trim() === ""
+        ? undefined
+        : values.name?.trim(),
+    };
+
+    const { data, error } = await supabase
+      .from("couples")
+      .update(cleanValues)
+      .eq("id", coupleId)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return data;
+}

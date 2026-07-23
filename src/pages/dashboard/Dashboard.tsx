@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { updateCouple } from "@/services/dashboard";
 import { useCoupleStore } from "@/store/coupleStore";
 import { useDashboardStore } from "@/store/dashboardStore";
 import CoupleHeader from "./components/CoupleHeader";
@@ -52,8 +51,7 @@ export default function Dashboard() {
           couple={summary?.couple ?? null}
           profile={profile}
           counts={summary?.counts}
-          onAnniversarySave={async (date) => {
-            await updateCouple(coupleId, { anniversary_date: date });
+          onCoupleUpdated={async () => {
             await load(coupleId);
           }}
         />
