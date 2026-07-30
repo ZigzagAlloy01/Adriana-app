@@ -6,14 +6,16 @@ import { useAuthStore } from "@/store/authStore";
 import { useCoupleStore } from "@/store/coupleStore";
 
 export default function JoinCouple() {
+  // Global auth state and store synchronization hook.
   const { user } = useAuthStore();
   const fetchCouple = useCoupleStore((state) => state.fetchCouple);
   const navigate = useNavigate();
+  // Component state for invite code input, action progress, feedback messages, and completion state.
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-
+  // Submits the shared invite code, binds user account to existing couple, and navigates to main dashboard.
   async function handleJoin() {
     if (!user || !code.trim()) return;
 
@@ -30,7 +32,7 @@ export default function JoinCouple() {
       setLoading(false);
     }
   }
-
+  //Code input form control
   return (
     <section className="space-y-6 rounded-lg bg-white p-6 text-left shadow-sm ring-1 ring-slate-200">
       <div>

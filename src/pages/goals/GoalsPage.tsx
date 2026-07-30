@@ -7,23 +7,25 @@ import { useCoupleStore } from "@/store/coupleStore";
 import type { GoalWithChecklist } from "@/types/domain";
 
 export default function GoalsPage() {
+  // Retrieves active couple ID context from shared store.
   const coupleId = useCoupleStore((state) => state.coupleId);
+  // Local component states for tracking goals, forms, per-goal checklist inputs, and loading status.
   const [goals, setGoals] = useState<GoalWithChecklist[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [checklistText, setChecklistText] = useState<Record<string, string>>({});
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
+  // Memoized data loader retrieving goals along with nested checklist items.
   const load = useCallback(async () => {
     if (!coupleId) return;
     setGoals(await listGoals(coupleId));
   }, [coupleId]);
-
+  // Initial data fetch execution on mount or when couple context changes.
   useEffect(() => {
     void load();
   }, [load]);
-
+  // Form handler for creating top-level couple goals.
   async function handleCreate(event: FormEvent) {
     event.preventDefault();
     if (!coupleId || !title.trim()) return;
@@ -41,12 +43,12 @@ export default function GoalsPage() {
       setLoading(false);
     }
   }
-
+  // Toggles overall completion status of a target goal.
   async function handleToggleGoal(goal: GoalWithChecklist) {
     await toggleGoal(goal.id, goal.status !== "completed");
     await load();
   }
-
+  // Appends a new item step to a specific goal's sub-checklist.
   async function handleCreateChecklistItem(goal: GoalWithChecklist) {
     const itemTitle = checklistText[goal.id]?.trim();
     if (!itemTitle) return;
@@ -55,12 +57,12 @@ export default function GoalsPage() {
     setChecklistText((current) => ({ ...current, [goal.id]: "" }));
     await load();
   }
-
+  // Updates completion status for an individual checklist task item.
   async function handleToggleItem(itemId: string, completed: boolean) {
     await toggleChecklistItem(itemId, completed);
     await load();
   }
-
+  //Goal feeds section with interactive checklists
   return (
     <main className="min-h-screen bg-rose-50 p-4 text-left sm:p-6">
       <div className="mx-auto grid max-w-5xl gap-5 lg:grid-cols-[360px_1fr]">

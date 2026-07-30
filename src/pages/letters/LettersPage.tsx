@@ -8,22 +8,24 @@ import { useCoupleStore } from "@/store/coupleStore";
 import type { TimelinePost } from "@/types/domain";
 
 export default function LettersPage() {
+  // Selects authenticated user and couple ID from global state stores.
   const user = useAuthStore((state) => state.user);
   const coupleId = useCoupleStore((state) => state.coupleId);
+  // Local state managing written letters list, textarea draft, error messages, and loading status.
   const [letters, setLetters] = useState<TimelinePost[]>([]);
   const [body, setBody] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
+  // Memoized data fetching function loading letter history.
   const load = useCallback(async () => {
     if (!coupleId) return;
     setLetters(await listLetters(coupleId));
   }, [coupleId]);
-
+  // Invokes letter list fetch when component mounts or couple context updates.
   useEffect(() => {
     void load();
   }, [load]);
-
+  // Form submission handler to compose and persist new letters.
   async function handleCreate(event: FormEvent) {
     event.preventDefault();
     if (!coupleId || !body.trim()) return;
@@ -40,7 +42,7 @@ export default function LettersPage() {
       setLoading(false);
     }
   }
-
+  //Timeline feed displaying sent and received letters
   return (
     <main className="min-h-screen bg-rose-50 p-4 text-left sm:p-6">
       <div className="mx-auto grid max-w-5xl gap-5 lg:grid-cols-[360px_1fr]">

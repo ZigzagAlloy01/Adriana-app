@@ -6,21 +6,23 @@ import { useCoupleStore } from "@/store/coupleStore";
 
 export default function Login() {
   const navigate = useNavigate();
+  // Fetch Zustand global actions to sync user and couple state after login.
   const initAuth = useAuthStore((state) => state.init);
   const { fetchCouple } = useCoupleStore();
-
+  
+  // Local state to manage form inputs and UI feedback during authentication.
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
+  // Asynchronous function handling the core login flow and preventing duplicate submissions.
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (loading) return;
 
     setLoading(true);
     setError(null);
-
+    // Authenticate the user securely directly against the Supabase backend.
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -31,14 +33,14 @@ export default function Login() {
       setLoading(false);
       return;
     }
-
+    // Sync global stores with backend data before redirecting to the dashboard.
     await initAuth();
     await fetchCouple();
 
     setLoading(false);
     navigate("/");
   };
-
+  // Renders a responsive, Tailwind-styled login card with dynamic error handling.
   return (
     <div className="min-h-screen flex items-center justify-center bg-pink-50">
       <form

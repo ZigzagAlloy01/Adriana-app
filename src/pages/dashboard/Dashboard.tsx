@@ -10,14 +10,16 @@ import PhotosPreview from "./components/PhotosPreview";
 import { supabase } from "@/services/supabase";
 
 export default function Dashboard() {
+  // Global state selectors for active couple context and dashboard data orchestrator.
   const coupleId = useCoupleStore((state) => state.coupleId);
   const { summary, loading, error, load } = useDashboardStore();
+  // Local state holding current user profile metadata.
   const [profile, setProfile] = useState<{ display_name?: string | null } | null>(null);
-
+  // Synchronizes dashboard metrics whenever couple state updates.
   useEffect(() => {
     if (coupleId) void load(coupleId);
   }, [coupleId, load]);
-
+  // Fetches authenticated user profile info directly from Supabase auth and DB.
   useEffect(() => {
     async function fetchUserProfile() {
       try {
@@ -40,10 +42,10 @@ export default function Dashboard() {
 
     void fetchUserProfile();
   }, []);
-
+  // Early return UI states for initial store hydration and error handling.
   if (!coupleId || loading) return <div className="min-h-screen bg-rose-50 p-6 text-slate-500">Cargando pareja...</div>;
   if (error) return <div className="min-h-screen bg-rose-50 p-6 text-red-600">{error}</div>;
-
+  // Main dashboard grid layout organizing widget components.
   return (
     <main className="min-h-screen bg-rose-50 p-4 text-left sm:p-6">
       <div className="mx-auto max-w-5xl space-y-5">

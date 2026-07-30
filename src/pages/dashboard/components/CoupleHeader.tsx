@@ -6,7 +6,7 @@ import { updateCouple } from "@/services/couples";
 type Profile = {
   display_name?: string | null;
 };
-
+// Component props interface defining couple metadata, user profile, and metric counters.
 type Props = {
   couple: Couple | null;
   profile?: Profile | null;
@@ -15,6 +15,7 @@ type Props = {
 };
 
 export default function CoupleHeader({ couple, profile, counts, onCoupleUpdated }: Props) {
+  // State management for inline editing mode, form data, loading status, and input auto-focus.
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({
     name: "",
@@ -22,12 +23,13 @@ export default function CoupleHeader({ couple, profile, counts, onCoupleUpdated 
   });
   const [saving, setSaving] = useState(false);
   const nameInputRef = useRef<HTMLInputElement>(null);
+  // Derived validation checks to determine if form data was altered or if inputs are invalid.
   const hasChanges = 
     form.name.trim() !== (couple?.name ?? "") ||
     (form.anniversary_date || "") !==
      (couple?.anniversary_date?.slice(0, 10) ?? "");
   const isNameEmpty = form.name.trim() === "";
-
+  // Synchronizes local form state whenever the parent couple prop changes or editing closes.
   useEffect(() => {
     if (!editing) {
       setForm({
@@ -36,13 +38,13 @@ export default function CoupleHeader({ couple, profile, counts, onCoupleUpdated 
       });
     }
   }, [couple, editing]);
-
+  // Automatically focuses the primary name input field when entering edit mode.
   useEffect(() => {
     if (editing) {
       nameInputRef.current?.focus();
     }
   }, [editing]);
-
+  // Formats UTC ISO anniversary date strings into localized Spanish long-date text.
   const anniversaryText = couple?.anniversary_date
     ? new Date(couple.anniversary_date.slice(0, 10) + "T12:00:00").toLocaleDateString("es-MX", {
         day: "numeric",
@@ -50,7 +52,7 @@ export default function CoupleHeader({ couple, profile, counts, onCoupleUpdated 
         year: "numeric",
       })
     : "Sin fecha";
-
+  // Handles updating couple details in Supabase and triggers refresh callback on success.
   async function handleSave() {
     if (!couple) return;
 
@@ -83,7 +85,7 @@ export default function CoupleHeader({ couple, profile, counts, onCoupleUpdated 
       setSaving(false);
     }
   }
-
+  // Resets local form input values and exits inline editing mode.
   function cancelEditing() {
     setForm({
       name: couple?.name ?? "",
@@ -92,7 +94,7 @@ export default function CoupleHeader({ couple, profile, counts, onCoupleUpdated 
 
     setEditing(false);
   }
-
+  //Dynamic counter grid summarizing overall shared couple statistics
   return (
     <section className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">

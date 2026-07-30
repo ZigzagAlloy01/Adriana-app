@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { supabase } from "@/services/supabase";
 import { getMyCouple } from "@/services/couples";
-
+// Type definition for couple context store state and synchronization actions.
 type CoupleState = {
   coupleId: string | null;
   loading: boolean;
@@ -9,12 +9,12 @@ type CoupleState = {
   fetchCouple: () => Promise<void>;
   reset: () => void;
 };
-
+// Global Zustand store for tracking linked couple ID and loading status.
 export const useCoupleStore = create<CoupleState>((set) => ({
   coupleId: null,
   loading: true,
   error: null,
-
+  // Synchronizes linked couple ID for the current authenticated session.
   fetchCouple: async () => {
     set({ loading: true, error: null });
 
@@ -35,6 +35,6 @@ export const useCoupleStore = create<CoupleState>((set) => ({
       });
     }
   },
-
+  // Resets store state to default empty values on sign-out or session end.
   reset: () => set({ coupleId: null, loading: false, error: null }),
 }));

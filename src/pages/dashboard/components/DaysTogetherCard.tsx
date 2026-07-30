@@ -1,11 +1,14 @@
+// Helper function calculating elapsed days between start date and current date.
 function getDaysTogether(startDate: string | null) {
   if (!startDate) return 0;
   const start = new Date(startDate);
   const now = new Date();
+  // Converts millisecond differences into full 24-hour days using floor division.
   return Math.max(0, Math.floor((now.getTime() - start.getTime()) / 86_400_000));
 }
-
+// Visual widget displaying the calculated days together counter card.
 export default function DaysTogetherCard({ startDate }: { startDate: string | null }) {
+  // Computes active days counter based on couple anniversary or creation date.
   const days = getDaysTogether(startDate);
 
   return (

@@ -1,12 +1,13 @@
+/* Core Tailwind v4, animation utilities, Shadcn theme defaults, and primary font imports */
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/figtree";
-
+/* Theme variable overrides defining the primary sans font family */
 @theme inline {
   --font-sans: "Figtree Variable", sans-serif;
 }
-
+/* Global root design tokens, typography rendering optimizations, and base background color */
 :root {
   font-family: "Figtree Variable", system-ui, sans-serif;
   color: #0f172a;
@@ -17,27 +18,27 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+/* Global box-sizing reset for consistent element layout calculations */
 * {
   box-sizing: border-box;
 }
-
+/* Base HTML document constraints and viewport background styling */
 html {
   min-width: 320px;
   background: #fff1f2;
 }
-
+/* Body element reset eliminating default user-agent margins */
 body {
   margin: 0;
   min-width: 320px;
 }
-
+/* Inherit typography styles across interactive form control elements */
 button,
 input,
 textarea {
   font: inherit;
 }
-
+/* Cursor pointer states for interactive button elements */
 button {
   cursor: pointer;
 }
@@ -45,7 +46,7 @@ button {
 button:disabled {
   cursor: not-allowed;
 }
-
+/* Primary React mount container enforcing full viewport height */
 #root {
   min-height: 100vh;
 }

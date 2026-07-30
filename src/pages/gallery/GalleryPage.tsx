@@ -7,23 +7,25 @@ import { useCoupleStore } from "@/store/coupleStore";
 import type { Photo } from "@/types/domain";
 
 export default function GalleryPage() {
+  // Access shared couple ID from global state store
   const coupleId = useCoupleStore((state) => state.coupleId);
+  // Local state management for gallery images, uploads, error handling, and lightbox preview
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [caption, setCaption] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
-
+  // Memoized data loader retrieving full gallery collection
   const load = useCallback(async () => {
     if (!coupleId) return;
     setPhotos(await listPhotos(coupleId));
   }, [coupleId]);
-
+  // Initial fetch execution on component load or when coupleId updates
   useEffect(() => {
     void load();
   }, [load]);
-
+  // Handles multipart file upload process and refreshes gallery view
   async function handleUpload(event: FormEvent) {
     event.preventDefault();
     if (!coupleId || !file) return;
@@ -41,7 +43,7 @@ export default function GalleryPage() {
       setLoading(false);
     }
   }
-
+  //Responsive image gallery grid
   return (
     <main className="min-h-screen bg-rose-50 p-4 text-left sm:p-6">
       <div className="mx-auto max-w-5xl space-y-5">

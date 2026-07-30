@@ -7,7 +7,9 @@ import { useCoupleStore } from "@/store/coupleStore";
 import type { Event } from "@/types/domain";
 
 export default function CalendarPage() {
+  // Retrieves shared couple ID state to scope scheduled dates to the active couple.
   const coupleId = useCoupleStore((state) => state.coupleId);
+  // Local state for fetched events list and form field values.
   const [events, setEvents] = useState<Event[]>([]);
   const [title, setTitle] = useState("");
   const [startsAt, setStartsAt] = useState("");
@@ -15,16 +17,16 @@ export default function CalendarPage() {
   const [location, setLocation] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
+  // Data-fetching callback to pull upcoming dates from backend services.
   const load = useCallback(async () => {
     if (!coupleId) return;
     setEvents(await listEvents(coupleId));
   }, [coupleId]);
-
+  // Triggers initial data load whenever the couple ID or fetch callback updates.
   useEffect(() => {
     void load();
   }, [load]);
-
+  // Handles new event form submissions, formatting date inputs into UTC ISO strings.
   async function handleCreate(event: FormEvent) {
     event.preventDefault();
     if (!coupleId || !title.trim() || !startsAt) return;
@@ -49,7 +51,7 @@ export default function CalendarPage() {
       setLoading(false);
     }
   }
-
+  // Two-column layout rendering the scheduling form alongside the date feed.
   return (
     <main className="min-h-screen bg-rose-50 p-4 text-left sm:p-6">
       <div className="mx-auto grid max-w-5xl gap-5 lg:grid-cols-[360px_1fr]">

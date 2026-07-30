@@ -1,3 +1,4 @@
+/* Interactive counter badge with dynamic accent borders and focus states */
 .counter {
   font-size: 16px;
   padding: 5px 10px;
@@ -16,7 +17,7 @@
     outline-offset: 2px;
   }
 }
-
+/* Hero branding container with 3D perspective transformations for logo layers */
 .hero {
   position: relative;
 
@@ -55,7 +56,7 @@
       scale(0.8);
   }
 }
-
+/* Primary centered container section with responsive spacing controls */
 #center {
   display: flex;
   flex-direction: column;
@@ -69,7 +70,7 @@
     gap: 18px;
   }
 }
-
+/* Secondary feature/navigation grid section switching to column layout on mobile */
 #next-steps {
   display: flex;
   border-top: 1px solid var(--border);
@@ -94,7 +95,7 @@
     text-align: center;
   }
 }
-
+/* Documentation panel border separator with responsive horizontal divider fallback */
 #docs {
   border-right: 1px solid var(--border);
 
@@ -103,7 +104,7 @@
     border-bottom: 1px solid var(--border);
   }
 }
-
+/* Social links and action button list within the next-steps panel */
 #next-steps ul {
   list-style: none;
   padding: 0;
@@ -152,7 +153,7 @@
     }
   }
 }
-
+/* Layout vertical spacing element */
 #spacer {
   height: 88px;
   border-top: 1px solid var(--border);
@@ -160,7 +161,7 @@
     height: 48px;
   }
 }
-
+/* Decorative edge indicators using CSS pseudo-element triangles */
 .ticks {
   position: relative;
   width: 100%;

@@ -11,11 +11,11 @@ import GoalsPage from "@/pages/goals/GoalsPage";
 import LettersPage from "@/pages/letters/LettersPage";
 import NotificationsPage from "@/pages/notifications/NotificationsPage";
 import ProtectedRoute from "@/routes/ProtectedRoute";
-
+// Higher-order utility wrapping page elements with authentication route guard checks.
 function protectedPage(page: React.ReactNode) {
   return <ProtectedRoute>{page}</ProtectedRoute>;
 }
-
+//Unauthenticated public authentication endpoints and protected application views requiring authenticated couple session
 export default function AppRouter() {
   return (
     <Routes>

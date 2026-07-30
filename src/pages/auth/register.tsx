@@ -4,37 +4,39 @@ import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const navigate = useNavigate();
-
+  // Local state variables for capturing form inputs and managing registration status.
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
+  // Asynchronous handler to register new users via Supabase auth.
   const handleRegister = async (e: React.FormEvent) => {
   e.preventDefault();
-
+  // Guard clause to prevent duplicate submit requests while loading.
   if (loading) return;
 
   setLoading(true);
   setError(null);
 
   try {
+    // Calls Supabase Authentication API to create a new user credentials record.
     const { error } = await supabase.auth.signUp({
       email,
       password,
     });
-
+    
     if (error) {
       setError(error.message);
       return;
     }
-
+    // Redirect user to the login route upon successful registration.
     navigate("/auth/login");
   } finally {
+    // Ensures loading state resets even if the network call fails.
     setLoading(false);
   }
 };
-
+  // Styled user registration card interface using Tailwind CSS utility classes.
   return (
     <div className="min-h-screen flex items-center justify-center bg-pink-50">
       <form

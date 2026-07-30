@@ -9,34 +9,37 @@ import { useCoupleStore } from "@/store/coupleStore";
 import type { Message } from "@/types/domain";
 
 export default function MessagesPage() {
+  // Retrieves active user context and shared couple ID from Zustand stores.
   const user = useAuthStore((state) => state.user);
   const coupleId = useCoupleStore((state) => state.coupleId);
+  // Local state for chat message feed, input field, error state, and send status.
   const [messages, setMessages] = useState<Message[]>([]);
   const [body, setBody] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
-
+  // Memoized callback function fetching full message history for active couple.
   const load = useCallback(async () => {
     if (!coupleId) return;
     setMessages(await listMessages(coupleId));
   }, [coupleId]);
-
+  // Initializes message feed and subscribes to Supabase real-time database changes.
   useEffect(() => {
     if (!coupleId) return;
 
     void load();
+    // Realtime channel listener updating feed whenever Postgres messages table mutates.
     const channel = supabase
       .channel(`messages:${coupleId}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "messages", filter: `couple_id=eq.${coupleId}` }, () => {
         void load();
       })
       .subscribe();
-
+    // Clean up function removing channel subscription on component unmount.
     return () => {
       void supabase.removeChannel(channel);
     };
   }, [coupleId, load]);
-
+  // Form handler sending outgoing text messages.
   async function handleSend(event: FormEvent) {
     event.preventDefault();
     if (!coupleId || !body.trim()) return;
@@ -53,7 +56,7 @@ export default function MessagesPage() {
       setSending(false);
     }
   }
-
+  //Scrollable chat thread displaying sent vs received message bubbles
   return (
     <main className="min-h-screen bg-rose-50 p-4 text-left sm:p-6">
       <div className="mx-auto flex max-w-3xl flex-col gap-4">

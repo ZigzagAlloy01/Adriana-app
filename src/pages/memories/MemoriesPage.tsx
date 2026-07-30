@@ -7,23 +7,25 @@ import { useCoupleStore } from "@/store/coupleStore";
 import type { Memory } from "@/types/domain";
 
 export default function MemoriesPage() {
+  // Retrieves shared couple context ID from state store.
   const coupleId = useCoupleStore((state) => state.coupleId);
+  // Component state for memories collection, form controls, error states, and submission loading.
   const [memories, setMemories] = useState<Memory[]>([]);
   const [title, setTitle] = useState("");
   const [memoryDate, setMemoryDate] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
+  // Memoized data fetching callback to pull memory feed.
   const load = useCallback(async () => {
     if (!coupleId) return;
     setMemories(await listMemories(coupleId));
   }, [coupleId]);
-
+  // Invokes memory list synchronization when couple ID is available.
   useEffect(() => {
     void load();
   }, [load]);
-
+  // Handles memory entry creation and updates timeline list.
   async function handleCreate(event: FormEvent) {
     event.preventDefault();
     if (!coupleId || !title.trim()) return;
@@ -42,12 +44,12 @@ export default function MemoriesPage() {
       setLoading(false);
     }
   }
-
+  // Toggles favorite star status for a specific memory item.
   async function handleFavorite(memory: Memory) {
     await toggleMemoryFavorite(memory.id, !memory.favorite);
     await load();
   }
-
+  //Memory timeline listing with interactive favorite toggle buttons
   return (
     <main className="min-h-screen bg-rose-50 p-4 text-left sm:p-6">
       <div className="mx-auto grid max-w-5xl gap-5 lg:grid-cols-[360px_1fr]">

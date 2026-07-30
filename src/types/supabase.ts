@@ -1,5 +1,5 @@
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
-
+// Database schema definition mapping public tables, views, RPC functions, and relationships.
 export type Database = {
   public: {
     Tables: {
@@ -88,5 +88,5 @@ export type Database = {
     CompositeTypes: Record<PropertyKey, never>;
   };
 };
-
+// Generic utility type extracting row models from specific database table names.
 export type Tables<T extends keyof Database["public"]["Tables"]> = Database["public"]["Tables"][T]["Row"];

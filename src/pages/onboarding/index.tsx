@@ -3,20 +3,21 @@ import { useNavigate } from "react-router-dom";
 import { useCoupleStore } from "@/store/coupleStore";
 import CreateCouple from "./CreateCouple";
 import JoinCouple from "./JoinCouple";
-
+// Union type defining the distinct wizard navigation steps for onboarding flow.
 type Mode = "home" | "create" | "join";
 
 export default function Onboarding() {
+  // Navigation mode switcher local state.
   const [mode, setMode] = useState<Mode>("home");
   const coupleId = useCoupleStore((state) => state.coupleId);
   const navigate = useNavigate();
-
+  // Automatic redirect effect skipping onboarding if couple context is already linked.
   useEffect(() => {
     if (coupleId) navigate("/dashboard", { replace: true });
   }, [coupleId, navigate]);
-
+  // Prevent flash of onboarding UI while redirecting active couple session.
   if (coupleId) return null;
-
+  //Entry menu step selecting between creating or joining a couple space
   return (
     <main className="flex min-h-screen items-center justify-center bg-rose-50 p-4">
       <div className="w-full max-w-md space-y-4">

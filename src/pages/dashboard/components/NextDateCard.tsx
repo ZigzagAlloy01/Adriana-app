@@ -1,6 +1,7 @@
 import type { Event } from "@/types/dashboard";
-
+// Props interface accepting either the next scheduled event object or null.
 export default function NextDateCard({ event }: { event: Event | null }) {
+  //Conditionally renders event details or a fallback placeholder when no dates are scheduled
   return (
     <section className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
       <h2 className="m-0 text-sm font-medium text-slate-500">Proxima cita</h2>

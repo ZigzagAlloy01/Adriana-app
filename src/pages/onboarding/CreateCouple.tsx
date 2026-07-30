@@ -6,14 +6,16 @@ import { useAuthStore } from "@/store/authStore";
 import { useCoupleStore } from "@/store/coupleStore";
 
 export default function CreateCouple() {
+  // Global auth state and couple store synchronization hook.
   const { user } = useAuthStore();
   const fetchCouple = useCoupleStore((state) => state.fetchCouple);
   const navigate = useNavigate();
+  // Local state for optional anniversary date, generated invite code, loading, and error states.
   const [anniversaryDate, setAnniversaryDate] = useState("");
   const [code, setCode] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
+  // Creates couple record in backend and generates unique partner share code.
   async function handleCreate() {
     if (!user) return;
 
@@ -30,7 +32,7 @@ export default function CreateCouple() {
       setLoading(false);
     }
   }
-
+  // Refreshes couple store context and routes user to primary dashboard view.
   async function handleGoToDashboard() {
     setLoading(true);
     try {
@@ -42,7 +44,7 @@ export default function CreateCouple() {
       setLoading(false);
     }
   }
-
+  //Conditional view: Date selection form before creation vs. generated invite code display
   return (
     <section className="space-y-6 rounded-lg bg-white p-6 text-left shadow-sm ring-1 ring-slate-200">
       <div>

@@ -1,6 +1,6 @@
 import { Bell, CalendarDays, Camera, Goal, HeartHandshake, Mail, MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
+// Navigation route mapping with Lucide icons for the quick access toolbar.
 const actions = [
   { label: "Citas", path: "/calendar", Icon: CalendarDays },
   { label: "Fotos", path: "/gallery", Icon: Camera },
@@ -10,7 +10,7 @@ const actions = [
   { label: "Metas", path: "/goals", Icon: Goal },
   { label: "Avisos", path: "/notifications", Icon: Bell },
 ];
-
+// Quick action navigation component rendering reactive dashboard shortcut buttons.
 export default function QuickActions() {
   const navigate = useNavigate();
 

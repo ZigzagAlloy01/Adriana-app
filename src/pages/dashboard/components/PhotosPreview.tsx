@@ -3,8 +3,10 @@ import { X } from "lucide-react";
 import type { Photo } from "@/types/dashboard";
 
 export default function PhotosPreview({ photos }: { photos: Photo[] }) {
+  // Local state managing the active photo selected for lightbox modal expansion.
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
-
+  // Responsive thumbnail grid displaying image previews or empty message
+  // Clickable thumbnail button that updates local state to trigger the modal view
   return (
     <>
       <section className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-slate-200">

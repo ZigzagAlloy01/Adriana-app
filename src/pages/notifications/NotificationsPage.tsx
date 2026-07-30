@@ -5,17 +5,18 @@ import { getErrorMessage } from "@/services/helpers";
 import type { Notification } from "@/types/domain";
 
 export default function NotificationsPage() {
+  // Local state tracking system notifications array and inline error feedback.
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [error, setError] = useState<string | null>(null);
-
+  // Data fetching helper to retrieve latest user notifications.
   async function load() {
     setNotifications(await listNotifications());
   }
-
+  // Fetches notification feed on component initialization.
   useEffect(() => {
     void load();
   }, []);
-
+  // Mutation handler updating a notification status to read.
   async function handleRead(notification: Notification) {
     if (notification.read) return;
 
@@ -26,7 +27,7 @@ export default function NotificationsPage() {
       setError(getErrorMessage(caught, "No se pudo marcar la notificacion."));
     }
   }
-
+  //Interactive list feed rendering unread and read activity items
   return (
     <main className="min-h-screen bg-rose-50 p-4 text-left sm:p-6">
       <div className="mx-auto max-w-4xl space-y-4">

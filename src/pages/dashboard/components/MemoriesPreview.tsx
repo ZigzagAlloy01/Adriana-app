@@ -1,5 +1,5 @@
 import type { Memory } from "@/types/dashboard";
-
+// Props interface typing the array of recent memory items passed to this preview widget.
 export default function MemoriesPreview({ memories }: { memories: Memory[] }) {
   return (
     <section className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
@@ -9,6 +9,7 @@ export default function MemoriesPreview({ memories }: { memories: Memory[] }) {
           <p className="text-sm text-slate-400">Aun no hay recuerdos.</p>
         ) : (
           memories.map((memory) => (
+            // Maps recent memory entries into styled chip components using unique IDs as keys.
             <span key={memory.id} className="rounded-full bg-rose-100 px-3 py-1 text-sm font-medium text-rose-700">
               {memory.title}
             </span>
