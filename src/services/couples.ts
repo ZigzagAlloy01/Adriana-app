@@ -96,10 +96,21 @@ export async function updateCouple(
 }
 
 export async function updateUserProfile(display_name: string) {
-  const {data, error} = await supabase.auth.updateUser({
-    data: { display_name: display_name },
-  });
+  const { data: { user }, error: userError} = await supabase.auth.getUser();
+
+  if (userError) throw userError;
+  if (!user) throw new Error("User not authenticated.")
+
+  const { data, error } = await supabase
+    .from("profiles")
+    .update({
+      display_name: display_name.trim(),
+    })
+    .eq("id", user.id)
+    .select()
+    .single();
 
   if (error) throw error;
-  return data.user;
+  
+  return data;
 }

@@ -20,26 +20,27 @@ export default function Dashboard() {
     if (coupleId) void load(coupleId);
   }, [coupleId, load]);
   // Fetches authenticated user profile info directly from Supabase auth and DB.
-  useEffect(() => {
-    async function fetchUserProfile() {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
 
-        const { data, error } = await supabase
-          .from("profiles")
-          .select("display_name")
-          .eq("id", user.id)
-          .single();
+  async function fetchUserProfile() {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
 
-        if (!error && data) {
-          setProfile(data);
-        }
-      } catch (err) {
-        console.error("No se pudo cargar el perfil:", err);
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("display_name")
+        .eq("id", user.id)
+        .single();
+
+      if (!error && data) {
+        setProfile(data);
       }
+    } catch (err) {
+      console.error("No se pudo cargar el perfil:", err);
     }
+  }
 
+  useEffect(() => {
     void fetchUserProfile();
   }, []);
   // Early return UI states for initial store hydration and error handling.
@@ -55,6 +56,7 @@ export default function Dashboard() {
           counts={summary?.counts}
           onCoupleUpdated={async () => {
             await load(coupleId);
+            await fetchUserProfile();
           }}
         />
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
