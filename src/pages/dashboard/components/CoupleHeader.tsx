@@ -20,6 +20,7 @@ export default function CoupleHeader({ couple, profile, counts, onCoupleUpdated 
   const [form, setForm] = useState({
     name: "",
     anniversary_date: "",
+    display_name: "",
   });
   const [saving, setSaving] = useState(false);
   const nameInputRef = useRef<HTMLInputElement>(null);
