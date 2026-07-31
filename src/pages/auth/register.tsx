@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { supabase } from "@/services/supabase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -75,13 +75,13 @@ export default function Register() {
         </button>
 
         <p className="text-sm text-center">
-          ¿Ya tienes cuenta?{" "}
-          <span
+          <span>¿Ya tienes cuenta? </span>
+          <Link
+            to="/auth/login"
             className="text-pink-600 cursor-pointer"
-            onClick={() => navigate("/auth/login")}
           >
             Inicia sesión
-          </span>
+          </Link>
         </p>
       </form>
     </div>

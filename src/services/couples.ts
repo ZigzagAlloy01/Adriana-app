@@ -94,3 +94,12 @@ export async function updateCouple(
 
     return data;
 }
+
+export async function updateUserProfile(display_name: string) {
+  const {data, error} = await supabase.auth.updateUser({
+    data: { display_name: display_name },
+  });
+
+  if (error) throw error;
+  return data.user;
+}

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Calendar, Check, Pencil } from "lucide-react";
 import type { Couple, DashboardCounts } from "@/types/domain";
-import { updateCouple } from "@/services/couples";
+import { updateCouple, updateUserProfile} from "@/services/couples";
 
 type Profile = {
   display_name?: string | null;
@@ -27,7 +27,8 @@ export default function CoupleHeader({ couple, profile, counts, onCoupleUpdated 
   const hasChanges = 
     form.name.trim() !== (couple?.name ?? "") ||
     (form.anniversary_date || "") !==
-     (couple?.anniversary_date?.slice(0, 10) ?? "");
+     (couple?.anniversary_date?.slice(0, 10) ?? "") ||
+     form.display_name.trim() !== (profile?.display_name ?? "");
   const isNameEmpty = form.name.trim() === "";
   // Synchronizes local form state whenever the parent couple prop changes or editing closes.
   useEffect(() => {
@@ -35,9 +36,10 @@ export default function CoupleHeader({ couple, profile, counts, onCoupleUpdated 
       setForm({
         name: couple?.name ?? "",
         anniversary_date: couple?.anniversary_date?.slice(0, 10) ?? "",
+        display_name: profile?.display_name ?? "",
       });
     }
-  }, [couple, editing]);
+  }, [couple, profile, editing]);
   // Automatically focuses the primary name input field when entering edit mode.
   useEffect(() => {
     if (editing) {
@@ -63,19 +65,25 @@ export default function CoupleHeader({ couple, profile, counts, onCoupleUpdated 
       const sameDate =
         (form.anniversary_date || null) ===
         (couple.anniversary_date?.slice(0, 10) ?? null);
+      const sameDisplayName = form.display_name.trim() === (profile?.display_name ?? "");
 
-      if (sameName && sameDate) {
+      if (sameName && sameDate && sameDisplayName) {
         setEditing(false);
         return;
       }
 
-      await updateCouple(couple.id, {
-        name: form.name,
-        anniversary_date: form.anniversary_date || null,
-      });
+      if (!sameName || !sameDate) {
+        await updateCouple(couple.id, {
+          name: form.name,
+          anniversary_date: form.anniversary_date || null,
+        });
+      }
+      
+      if (!sameDisplayName) {
+        await updateUserProfile(form.display_name.trim());
+      }
 
       setEditing(false);
-
       await onCoupleUpdated?.();
 
     } catch (error) {
@@ -90,6 +98,7 @@ export default function CoupleHeader({ couple, profile, counts, onCoupleUpdated 
     setForm({
       name: couple?.name ?? "",
       anniversary_date: couple?.anniversary_date?.slice(0, 10) ?? "",
+      display_name: profile?.display_name ?? "",
     });
 
     setEditing(false);
@@ -99,36 +108,52 @@ export default function CoupleHeader({ couple, profile, counts, onCoupleUpdated 
     <section className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-medium text-rose-600">
-            {profile?.display_name ? `¡Hola ${profile.display_name}!` : "¡Hola!"}
-          </p>
-
           {editing ? (
             <>
-              <input
-                ref={nameInputRef}
-                className="mt-2 w-full rounded-lg border border-slate-200 px-3 py-2 text-2xl font-semibold"
-                value={form.name}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    name: e.target.value,
-                  })
-                }
+              <div className="mb-2">
+                <label className="block text-xs font-semibold text-slate-500 uppercase">Tu nombre</label>
+                <input
+                  type="text"
+                  className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium"
+                  placeholder="Tu nombre"
+                  value={form.display_name}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      display_name: e.target.value,
+                    })
+                  }
+                />
+              </div>
 
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    void handleSave();
+              <div className="mb-2">
+                <label className="block text-xs font-semibold text-slate-500 uppercase">Nombre de la Pareja</label>
+                <input
+                  ref={nameInputRef}
+                  className="mt-2 w-full rounded-lg border border-slate-200 px-3 py-2 text-2xl font-semibold"
+                  value={form.name}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      name: e.target.value,
+                    })
                   }
 
-                  if (e.key === "Escape") {
-                    cancelEditing();
-                  }
-                }}
-              />
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      void handleSave();
+                    }
+
+                    if (e.key === "Escape") {
+                      cancelEditing();
+                    }
+                  }}
+                />
+              </div>
+                
 
               <p className="mt-1 text-sm text-slate-500">
-                Nuestro espacio privado de pareja :3
+                <span>Nuestro espacio privado de pareja :3</span>
               </p>
 
               <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-slate-600">
@@ -158,31 +183,37 @@ export default function CoupleHeader({ couple, profile, counts, onCoupleUpdated 
                 />
 
                 <button
+                  type="button"
                   onClick={() => void handleSave()}
                   disabled={saving || !hasChanges || isNameEmpty}
                   className="inline-flex items-center gap-1 rounded-lg bg-rose-600 px-3 py-2 text-white disabled:opacity-60"
                 >
                   <Check className="size-4" />
-                  {saving ? "Guardando..." : "Guardar"}
+                  <span>{saving ? "Guardando..." : "Guardar"}</span>
                 </button>
 
                 <button
+                  type="button"
                   onClick={cancelEditing}
                   disabled={saving}
                   className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-3 py-2"
                 >
-                  Cancelar
+                  <span>Cancelar</span>
                 </button>
               </div>
             </>
           ) : (
             <>
+              <p className="text-sm font-medium text-rose-600">
+                <span>{profile?.display_name ? `¡Hola ${profile.display_name}!` : "¡Hola!"}</span>
+              </p>
+
               <h1 className="m-0 text-2xl font-semibold text-slate-950">
-                {couple?.name ?? "Nuestra historia"}
+                <span>{couple?.name ?? "Nuestra historia"}</span>
               </h1>
 
               <p className="mt-1 text-sm text-slate-500">
-                Nuestro espacio privado de pareja :3
+                <span>Nuestro espacio privado de pareja :3</span>
               </p>
 
               <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-slate-600">
@@ -193,12 +224,13 @@ export default function CoupleHeader({ couple, profile, counts, onCoupleUpdated 
                 </span>
 
                 <button
+                  type="button"
                   disabled={saving}
                   onClick={() => setEditing(true)}
                   className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-3 py-2 font-medium disabled:opacity-60"
                 >
                   <Pencil className="size-4" />
-                  Editar
+                  <span>Editar</span>
                 </button>
               </div>
             </>

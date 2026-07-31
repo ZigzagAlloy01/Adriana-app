@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { supabase } from "@/services/supabase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
 import { useCoupleStore } from "@/store/coupleStore";
 //A React Hook is a special JavaScript function that allows developers to use React features directly inside functional components.
@@ -78,13 +78,13 @@ export default function Login() {
         </button>
 
         <p className="text-sm text-center">
-          ¿No tienes cuenta?{" "}
-          <span
+          <span>¿No tienes cuenta? </span>
+          <Link
+            to="/auth/register"
             className="text-pink-600 cursor-pointer"
-            onClick={() => navigate("/auth/register")}
           >
             Regístrate
-          </span>
+          </Link>
         </p>
       </form>
     </div>
