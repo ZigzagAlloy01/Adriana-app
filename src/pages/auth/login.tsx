@@ -3,7 +3,7 @@ import { supabase } from "@/services/supabase";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
 import { useCoupleStore } from "@/store/coupleStore";
-
+//A React Hook is a special JavaScript function that allows developers to use React features directly inside functional components.
 export default function Login() {
   const navigate = useNavigate();
   // Fetch Zustand global actions to sync user and couple state after login.
@@ -11,6 +11,7 @@ export default function Login() {
   const { fetchCouple } = useCoupleStore();
   
   // Local state to manage form inputs and UI feedback during authentication.
+  //useState is a built-in React Hook that lets functional components manage and store dynamic state data
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);

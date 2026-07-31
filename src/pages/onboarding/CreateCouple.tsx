@@ -16,6 +16,18 @@ export default function CreateCouple() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   // Creates couple record in backend and generates unique partner share code.
+
+  useEffect(() => {
+    if (!code) return;
+
+    const timer = setTimeout(() => {
+      void handleGoToDashboard();
+    }, 300000);
+
+    return () => clearTimeout(timer);
+
+  }, [code]);
+
   async function handleCreate() {
     if (!user) return;
 
@@ -25,7 +37,7 @@ export default function CreateCouple() {
       const displayName = typeof user.user_metadata.display_name === "string" ? user.user_metadata.display_name : null;
       const inviteCode = await createCouple(anniversaryDate || null, displayName);
       setCode(inviteCode);
-      await fetchCouple();
+
     } catch (caught) {
       setError(getErrorMessage(caught, "No se pudo crear la pareja."));
     } finally {
