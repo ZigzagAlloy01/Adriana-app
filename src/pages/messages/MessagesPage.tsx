@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useLayoutEffect, useRef } from "react";
 import type { FormEvent } from "react";
 import { ArrowLeft, MessageCircle, Send } from "lucide-react";
 import { listMessages, sendMessage } from "@/services/dashboard";
@@ -17,6 +17,7 @@ export default function MessagesPage() {
   const [body, setBody] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   // Memoized callback function fetching full message history for active couple.
   const load = useCallback(async () => {
     if (!coupleId) return;
@@ -39,6 +40,15 @@ export default function MessagesPage() {
       void supabase.removeChannel(channel);
     };
   }, [coupleId, load]);
+
+  useLayoutEffect(() => {
+    const container = messagesContainerRef.current;
+
+    if(!container) return;
+
+    container.scrollTop = 0;
+  }, [messages]);
+
   // Form handler sending outgoing text messages.
   async function handleSend(event: FormEvent) {
     event.preventDefault();
@@ -49,7 +59,7 @@ export default function MessagesPage() {
     try {
       await sendMessage(coupleId, body.trim());
       setBody("");
-      await load();
+      // await load();
     } catch (caught) {
       setError(getErrorMessage(caught, "No se pudo enviar el mensaje."));
     } finally {
@@ -77,17 +87,48 @@ export default function MessagesPage() {
           {error && <p className="mt-3 rounded-lg bg-red-50 p-3 text-sm text-red-700">{error}</p>}
         </section>
 
-        <section className="flex min-h-96 flex-col gap-3 rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200">
-          {messages.length === 0 ? <p className="text-sm text-slate-500">Todavia no hay mensajes.</p> : null}
-          {messages.map((message) => {
-            const own = message.sender_id === user?.id;
-            return (
-              <div key={message.id} className={own ? "max-w-[80%] self-end rounded-lg bg-rose-600 px-4 py-2 text-white" : "max-w-[80%] self-start rounded-lg bg-slate-100 px-4 py-2 text-slate-800"}>
-                <p className="wrap-break-word">{message.body}</p>
-                <p className={own ? "mt-1 text-xs text-rose-100" : "mt-1 text-xs text-slate-500"}>{new Date(message.created_at).toLocaleString()}</p>
-              </div>
-            );
-          })}
+        <section ref={messagesContainerRef} className="flex h-[75vh] min-h-[400px] max-h-[800px] flex-col gap-3 overflow-y-auto scroll-smooth rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200">
+          {messages.length === 0 ? (
+            <div className="flex flex-1 items-center justify-center">
+              <p className="text-sm text-slate-500">
+                Todavía no hay mensajes.
+              </p>
+            </div>
+          ) : (
+            [...messages]
+              .sort(
+                (a, b) => 
+                  new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+              )
+              .map((message) => {
+                const own = message.sender_id === user?.id;
+
+                return (
+                  <div
+                    key={message.id}
+                    className={
+                      own
+                        ? "max-w-[80%] self-end rounded-lg bg-rose-600 px-4 py-2 text-white"
+                        : "max-w-[80%] self-start rounded-lg bg-slate-100 px-4 py-2 text-slate-800"
+                    }
+                  >
+                    <p className="wrap-break-word">
+                      {message.body}
+                    </p>
+
+                    <p
+                      className={
+                        own
+                          ? "mt-1 text-xs text-rose-100"
+                          : "mt-1 text-xs text-slate-500"
+                      }
+                    >
+                      {new Date(message.created_at).toLocaleString()}
+                    </p>
+                  </div>
+                );
+              })
+          )}
         </section>
 
         <form onSubmit={handleSend} className="flex gap-2">
